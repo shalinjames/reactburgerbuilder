@@ -1,14 +1,14 @@
 import React from "react";
-import Aux from "../../hoc/Aux";
+import Hoc from "../../higherordercomps/hoc";
 import classes from "./Layout.css";
 
 const Layout = props => {
   console.info(classes);
   return (
-    <Aux>
+    <Hoc>
       <div>Toolbar, SideDrawer, Backdrop </div>
       <main className={classes.Contents}>{props.children}</main>
-    </Aux>
+    </Hoc>
   );
 };
 
