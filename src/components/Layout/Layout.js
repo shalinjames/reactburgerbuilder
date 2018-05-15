@@ -3,7 +3,6 @@ import Hoc from "../../higherordercomps/hoc";
 import classes from "./Layout.css";
 
 const Layout = props => {
-  console.info(classes);
   return (
     <Hoc>
       <div>Toolbar, SideDrawer, Backdrop </div>

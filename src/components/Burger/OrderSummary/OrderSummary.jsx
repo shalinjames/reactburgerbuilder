@@ -5,7 +5,7 @@ import Hoc from "../../../higherordercomps/hoc";
 const orderSummary = props => {
   const ingredientsSummary = Object.keys(props.ingredients).map(ingredient => {
     return (
-      <li>
+      <li key={ingredient}>
         <span style={{ textTransform: "bold" }}>{ingredient}</span>:
         {props.ingredients[ingredient]}
       </li>
