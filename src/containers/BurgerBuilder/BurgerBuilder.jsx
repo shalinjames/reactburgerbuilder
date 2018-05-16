@@ -34,6 +34,9 @@ class BurgerBuilder extends Component {
   purchaseCancelHandler = () => {
     this.purchaseHandler(false);
   };
+  purchaseContinueHandler = () => {
+    console.info(this.state.ingredients);
+  };
   updatePurchaseable = ingredients => {
     const purchaseable = Object.values(ingredients).reduce(
       (total, cost) => total + cost,
@@ -71,7 +74,12 @@ class BurgerBuilder extends Component {
           show={this.state.purchasing}
           modelClosed={this.purchaseCancelHandler}
         >
-          <OrderSummary ingredients={this.state.ingredients} />
+          <OrderSummary
+            ingredients={this.state.ingredients}
+            purchaseCanceled={this.purchaseCancelHandler}
+            purchaseContinue={this.purchaseContinueHandler}
+            price={this.state.totalPrice}
+          />
         </Modal>
         <Burger ingredients={this.state.ingredients} />
         <BurgerControls
