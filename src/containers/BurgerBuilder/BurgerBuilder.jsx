@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import Hoc from "../../higherordercomps/hoc";
+import Hoc from "../../higherordercomps/Hoc/hoc";
 import Burger from "../../components/Burger/Burger";
 import BurgerControls from "../../components/Burger/BuildControls/BuildControls";
 import Modal from "../../components/UI/Modal/Modal";
@@ -20,7 +20,7 @@ class BurgerBuilder extends Component {
       bacon: 0,
       salad: 0
     },
-    totalPrice: 0,
+    totalPrice: 4,
     purchaseable: false,
     purchasing: false
   };
