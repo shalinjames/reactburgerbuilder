@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Route } from "react-router-dom";
 
 import Hoc from "../../higherordercomps/Hoc/hoc";
 import Burger from "../../components/Burger/Burger";
@@ -40,30 +41,16 @@ class BurgerBuilder extends Component {
     this.purchaseHandler(false);
   };
   purchaseContinueHandler = () => {
-    this.setState({ loading: true });
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: "Shalin James",
-        address: {
-          street: "Test street",
-          zipCode: "561222",
-          country: "India"
-        },
-        email: "testuser@test.com",
-        mobile: "22554488648"
-      },
-      deliveryMethod: "fastest"
-    };
-    axios
-      .post("/orders.json", order)
-      .then(response => {
-        this.setState({ loading: false, purchasing: false });
-      })
-      .catch(error => {
-        this.setState({ loading: false, purchasing: false });
-      });
+    const queryParams = Object.keys(this.state.ingredients).map(ingredient => {
+      return `${encodeURIComponent(ingredient)}=${encodeURIComponent(
+        this.state.ingredients[ingredient]
+      )}`;
+    });
+
+    this.props.history.push({
+      pathname: "/checkout",
+      search: queryParams.join("&")
+    });
   };
   updatePurchaseable = ingredients => {
     const purchaseable = Object.values(ingredients).reduce(
