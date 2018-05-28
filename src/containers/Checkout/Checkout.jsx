@@ -20,10 +20,15 @@ class Checkout extends Component {
   componentWillMount() {
     const orderId = new URLSearchParams(this.props.location.search);
     const ingredients = {};
+    let totalPrice = 0;
     for (let param of orderId.entries()) {
-      ingredients[param[0]] = +param[1];
+      if (param[0] === "totalPrice") {
+        totalPrice = +param[1];
+      } else {
+        ingredients[param[0]] = +param[1];
+      }
     }
-    this.setState({ ingredients });
+    this.setState({ ingredients, totalPrice });
     // if (orderId) {
     //   axios
     //     .get(`https://react-burger-1d081.firebaseio.com/orders/${orderId}.json`)
