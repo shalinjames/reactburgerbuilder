@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { connect } from "react-redux";
 import { Route } from "react-router-dom";
 
 import classes from "./Checkout.css";
@@ -17,50 +17,25 @@ class Checkout extends Component {
   checkoutCancelledHandler = () => {
     this.props.history.goBack();
   };
-  componentWillMount() {
-    const orderId = new URLSearchParams(this.props.location.search);
-    const ingredients = {};
-    let totalPrice = 0;
-    for (let param of orderId.entries()) {
-      if (param[0] === "totalPrice") {
-        totalPrice = +param[1];
-      } else {
-        ingredients[param[0]] = +param[1];
-      }
-    }
-    this.setState({ ingredients, totalPrice });
-    // if (orderId) {
-    //   axios
-    //     .get(`https://react-burger-1d081.firebaseio.com/orders/${orderId}.json`)
-    //     .then(response => {
-    //       this.setState({ ingredients: response.data.ingredients });
-    //     });
-    // }
-  }
   render() {
     return (
       <div className={classes.Checkout}>
         <CheckoutSummary
-          ingredients={this.state.ingredients}
+          ingredients={this.props.ingredients}
           checkoutCancelled={this.checkoutCancelledHandler}
           checkoutContinued={this.checkoutContinuedHandler}
         />
         <Route
           path={`${this.props.match.path}/contact`}
           exact
-          render={props => {
-            return (
-              <ContactData
-                {...props}
-                ingredients={this.state.ingredients}
-                price={this.state.totalPrice}
-              />
-            );
-          }}
+          component={ContactData}
         />
       </div>
     );
   }
 }
 
-export default Checkout;
+const mapStateToProps = state => ({
+  ingredients: state.ingredients
+});
+export default connect(mapStateToProps)(Checkout);
