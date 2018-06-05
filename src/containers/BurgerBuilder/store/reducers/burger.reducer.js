@@ -1,4 +1,4 @@
-import * as actionTypes from "./actions";
+import * as actionTypes from "../actions/actionsTypes";
 
 const INGREDIENTS_PRICE = {
   meat: 1.3,
@@ -8,15 +8,15 @@ const INGREDIENTS_PRICE = {
 };
 
 const initialstate = {
-  ingredients: { bacon: 0, salad: 0, cheese: 0, meat: 0 },
-  totalPrice: 0
+  ingredients: null,
+  totalPrice: 4,
+  error: true
 };
 
-const burgerReducer = (state = initialstate, action) => {
-  let returnState = {};
+export const burgerReducer = (state = initialstate, action) => {
   switch (action.type) {
     case actionTypes.ADD_INGREDIENT:
-      returnState = {
+      return {
         ...state,
         ingredients: {
           ...state.ingredients,
@@ -24,9 +24,8 @@ const burgerReducer = (state = initialstate, action) => {
         },
         totalPrice: state.totalPrice + INGREDIENTS_PRICE[action.ingredientName]
       };
-      break;
     case actionTypes.REMOVE_INGREDIENT:
-      returnState = {
+      return {
         ...state,
         ingredients: {
           ...state.ingredients,
@@ -34,11 +33,20 @@ const burgerReducer = (state = initialstate, action) => {
         },
         totalPrice: state.totalPrice - INGREDIENTS_PRICE[action.ingredientName]
       };
-      break;
+    case actionTypes.SET_INGREDIENTS:
+      return {
+        ...state,
+        ingredients: { ...action.ingredients },
+        error: false
+      };
+    case actionTypes.FETCH_INGREDIENTS_ERROR:
+      return {
+        ...state,
+        error: true
+      };
     default:
-      returnState = { ...state };
+      return { ...state };
   }
-  return returnState;
 };
 
 export default burgerReducer;

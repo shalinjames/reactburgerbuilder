@@ -9,7 +9,7 @@ import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import axios from "../../services/axios-orders";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../higherordercomps/withErrorHandler/withErrorHandler";
-import * as actionTypes from "./../../store/actions";
+import * as actions from "./store/actions/action";
 
 class BurgerBuilder extends Component {
   state = {
@@ -18,10 +18,8 @@ class BurgerBuilder extends Component {
     error: false
   };
   componentDidMount = () => {
-    // axios
-    //   .get("https://react-burger-1d081.firebaseio.com/ingredients.json")
-    //   .then(response => this.setState({ ingredients: response.data }))
-    //   .catch(error => this.setState({ error: error }));
+    // init ingredients
+    this.props.onInitIngredients();
   };
   purchaseHandler = purchasing => {
     this.setState({ purchasing });
@@ -56,7 +54,7 @@ class BurgerBuilder extends Component {
       disabledInfo[key] = disabledInfo[key] <= 0;
     }
     let orderSummary = null;
-    let burger = this.state.error ? (
+    let burger = this.props.error ? (
       <p> Error in loading the ingredient </p>
     ) : (
       <Spinner />
@@ -104,13 +102,15 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = state => ({
   ings: state.ingredients,
-  totalPrice: state.totalPrice
+  totalPrice: state.totalPrice,
+  error: state.error
 });
 const mapDispatchToProps = dispatch => ({
   onAddIngredient: ingredientName =>
-    dispatch({ type: actionTypes.ADD_INGREDIENT, ingredientName }),
+    dispatch(actions.addIngredient(ingredientName)),
   onRemoveIngredient: ingredientName =>
-    dispatch({ type: actionTypes.REMOVE_INGREDIENT, ingredientName })
+    dispatch(actions.removeIngredient(ingredientName)),
+  onInitIngredients: () => dispatch(actions.initIngredients())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
