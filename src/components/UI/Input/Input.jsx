@@ -14,6 +14,7 @@ const input = props => {
           {...props.elementDefaultProps}
           className={[inputClasses.join(" ")]}
           onChange={props.changed}
+          value={props.value}
         />
       );
       break;
@@ -28,7 +29,11 @@ const input = props => {
       break;
     case "select":
       inputElement = (
-        <select className={[inputClasses.join(" ")]} onChange={props.changed}>
+        <select
+          className={[inputClasses.join(" ")]}
+          onChange={props.changed}
+          value={props.value}
+        >
           {props.elementDefaultProps.options.map((option, index) => {
             return (
               <option value={option.value} key={option.value + index}>

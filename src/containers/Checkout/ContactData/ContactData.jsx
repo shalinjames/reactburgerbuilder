@@ -7,6 +7,8 @@ import axios from "../../../services/axios-orders";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import Inupt from "../../../components/UI/Input/Input";
 import ContactForm from "./ContactForm";
+import * as actions from "../store/actions/purchase";
+import withErrorHandler from "../../../higherordercomps/withErrorHandler/withErrorHandler";
 
 class ContactData extends Component {
   state = {
@@ -67,15 +69,7 @@ class ContactData extends Component {
       price: this.props.price,
       orderData: this.getFormInfo()
     };
-    axios
-      .post("/orders.json", order)
-      .then(response => {
-        this.setState({ loading: false });
-        this.props.history.push("/");
-      })
-      .catch(error => {
-        this.setState({ loading: false });
-      });
+    this.props.purchase(order);
   };
   render() {
     const orderForm = [];
@@ -90,6 +84,7 @@ class ContactData extends Component {
           invalid={!props.valid}
           touched={props.touched}
           changed={event => this.inputElementClickedHandler(event, element)}
+          value={props.value}
         />
       );
     }
@@ -115,7 +110,14 @@ class ContactData extends Component {
 }
 
 const mapStateToProps = state => ({
-  ingredients: state.ingredients,
-  price: state.totalPrice
+  ingredients: state.burger.ingredients,
+  price: state.burger.totalPrice
 });
-export default connect(mapStateToProps)(ContactData);
+
+const mapDispatchToProps = dispatch => ({
+  purchase: order => dispatch(actions.purchase(order))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withErrorHandler(ContactData, axios)
+);

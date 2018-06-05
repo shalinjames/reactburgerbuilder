@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import axios from "../../services/axios-orders";
 import Hoc from "../../higherordercomps/Hoc/hoc";
+import { connect } from "react-redux";
 
 import Spinner from "../../components/UI/Spinner/Spinner";
 import Order from "../../components/Burger/Order/Order";
+import * as actions from "../Checkout/store/actions/purchase";
 
 class Orders extends Component {
   state = {
@@ -22,21 +24,23 @@ class Orders extends Component {
     return orders;
   }
   componentDidMount() {
-    this.showLoader(true);
-    axios
-      .get("/orders.json")
-      .then(res => {
-        this.showLoader(false);
-        const orders = this.parseResponseOrders(res.data);
-        this.setState({ orders });
-        console.info(res.data, this.state.orders);
-      })
-      .catch(error => {
-        this.showLoader(false);
-      });
+    //this.showLoader(true);
+    // axios
+    //   .get("/orders.json")
+    //   .then(res => {
+    //     this.showLoader(false);
+    //     const orders = this.parseResponseOrders(res.data);
+    //     this.setState({ orders });
+    //     console.info(res.data, this.state.orders);
+    //   })
+    //   .catch(error => {
+    //     this.showLoader(false);
+    //   });
+    this.props.onInitOrder();
   }
   render() {
-    let orders = this.state.orders.map(order => {
+    console.info(this.props.orders);
+    let orders = this.props.orders.map(order => {
       return (
         <Order
           key={order.id}
@@ -49,4 +53,12 @@ class Orders extends Component {
   }
 }
 
-export default Orders;
+const mapStateToProps = state => ({
+  orders: state.purchase.orders
+});
+
+const mapDispatchToProps = dispatch => ({
+  onInitOrder: () => dispatch(actions.initOrders())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Orders);

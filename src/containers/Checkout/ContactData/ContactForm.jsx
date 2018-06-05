@@ -80,7 +80,7 @@ export const contactForm = {
       { value: "cheapest", displayValue: "Cheapest" }
     ],
     "deliverymethod",
-    "",
+    "fasetest",
     ""
   )
 };
