@@ -1,4 +1,5 @@
 import * as actionsTypes from "../actions/actionsTypes";
+import * as utils from "./purchase.reducer.util";
 
 const intialState = {
   orders: [],
@@ -10,33 +11,15 @@ const intialState = {
 export const purchaseReducer = (state = intialState, action) => {
   switch (action.type) {
     case actionsTypes.PURCHASE_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        redirect: true,
-        orders: [...state.orders, { ...action.orderData }]
-      };
+      return utils.purchaseSucces(state, action);
     case actionsTypes.PURCHASE_FAILURE:
-      return {
-        ...state,
-        loading: false
-      };
+      return utils.purchaseFailure(state, action);
     case actionsTypes.PURCHASE_LOADING:
-      return {
-        ...state,
-        loading: true
-      };
+      return utils.purchaseLoading(state, action);
     case actionsTypes.SET_ORDERS:
-      return {
-        ...state,
-        ordersloading: false,
-        orders: [...action.orders]
-      };
+      return utils.setOrders(state, action);
     case actionsTypes.ORDERS_LOADING:
-      return {
-        ...state,
-        ordersloading: true
-      };
+      return utils.ordersLoading(state, action);
     default:
       return state;
   }
