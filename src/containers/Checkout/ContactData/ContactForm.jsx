@@ -1,7 +1,7 @@
 const configValidationRules = (rules = {}) => {
   return {
     validation: {
-      required: rules.required || true,
+      required: !!rules.required,
       minLength: rules.minLength,
       maxLength: rules.maxLength
     },

@@ -8,13 +8,19 @@ import Layout from "./higherordercomps/Layout/Layout";
 import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";
 import Checkout from "./containers/Checkout/Checkout";
 import Orders from "./containers/Orders/Orders";
-import { burgerReducer, purchaseReducer } from "./store/reducers/reducer";
+import Auth from "./containers/Auth/Auth";
+import {
+  burgerReducer,
+  purchaseReducer,
+  authReducer
+} from "./store/reducers/reducer";
 
 class App extends Component {
   render() {
     const rootReducers = combineReducers({
       burger: burgerReducer,
-      purchase: purchaseReducer
+      purchase: purchaseReducer,
+      auth: authReducer
     });
     const composeEnhancers =
       window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -29,6 +35,7 @@ class App extends Component {
             <Switch>
               <Route path="/checkout" component={Checkout} />
               <Route path="/orders" exact component={Orders} />
+              <Route path="/auth" component={Auth} />
               <Route path="/" exact component={BurgerBuilder} />
             </Switch>
           </Layout>

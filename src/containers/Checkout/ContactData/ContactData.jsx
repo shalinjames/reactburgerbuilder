@@ -69,7 +69,7 @@ class ContactData extends Component {
       price: this.props.price,
       orderData: this.getFormInfo()
     };
-    this.props.purchase(order);
+    this.props.purchase(order, this.props.authData.idToken);
   };
   render() {
     const orderForm = [];
@@ -111,13 +111,15 @@ class ContactData extends Component {
 
 const mapStateToProps = state => ({
   ingredients: state.burger.ingredients,
-  price: state.burger.totalPrice
+  price: state.burger.totalPrice,
+  authData: state.auth.authData
 });
 
 const mapDispatchToProps = dispatch => ({
-  purchase: order => dispatch(actions.purchase(order))
+  purchase: (order, token) => dispatch(actions.purchase(order, token))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  withErrorHandler(ContactData, axios)
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(ContactData, axios));

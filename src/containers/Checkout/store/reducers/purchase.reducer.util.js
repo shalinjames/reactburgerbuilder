@@ -25,3 +25,6 @@ export const setOrders = (state, action) =>
 
 export const ordersLoading = (state, action) =>
   updateObject(state, { ordersloading: true });
+
+export const showError = (state, action) =>
+  updateObject(state, { error: action.error });

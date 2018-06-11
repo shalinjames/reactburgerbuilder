@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import axios from "../../services/axios-orders";
 
 import Spinner from "../../components/UI/Spinner/Spinner";
 import Order from "../../components/Burger/Order/Order";
 import * as actions from "../Checkout/store/actions/purchase";
+import withErrorHandler from "../../higherordercomps/withErrorHandler/withErrorHandler";
 
 class Orders extends Component {
   state = {
@@ -22,10 +24,9 @@ class Orders extends Component {
     return orders;
   }
   componentDidMount() {
-    this.props.onInitOrder();
+    this.props.onInitOrder(this.props.authData.idToken);
   }
   render() {
-    console.info(this.props.orders);
     let orders = this.props.orders.map(order => {
       return (
         <Order
@@ -41,14 +42,15 @@ class Orders extends Component {
 
 const mapStateToProps = state => ({
   orders: state.purchase.orders,
-  loading: state.purchase.loading
+  loading: state.purchase.loading,
+  authData: state.auth.authData
 });
 
 const mapDispatchToProps = dispatch => ({
-  onInitOrder: () => dispatch(actions.initOrders())
+  onInitOrder: token => dispatch(actions.initOrders(token))
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Orders);
+)(withErrorHandler(Orders, axios));

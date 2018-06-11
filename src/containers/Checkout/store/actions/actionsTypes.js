@@ -3,3 +3,4 @@ export const PURCHASE_FAILURE = "PURCHASE_FAILURE";
 export const PURCHASE_LOADING = "PURCHASE_LOADING";
 export const SET_ORDERS = "SET_ORDERS";
 export const ORDERS_LOADING = "ORDERS_LOADING";
+export const SHOW_ERROR = "SHOW_ERROR";

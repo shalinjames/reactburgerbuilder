@@ -5,7 +5,8 @@ const intialState = {
   orders: [],
   loading: false,
   redirect: false,
-  ordersloading: false
+  ordersloading: false,
+  error: null
 };
 
 export const purchaseReducer = (state = intialState, action) => {
@@ -20,6 +21,8 @@ export const purchaseReducer = (state = intialState, action) => {
       return utils.setOrders(state, action);
     case actionsTypes.ORDERS_LOADING:
       return utils.ordersLoading(state, action);
+    case actionsTypes.SHOW_ERROR:
+      return utils.showError(state, action);
     default:
       return state;
   }
