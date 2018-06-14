@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+
 import Hoc from "../../higherordercomps/Hoc/hoc";
 import classes from "./Layout.css";
 import Toolbar from "../../components/Navigation/Toolbar/Toolbar";
@@ -19,10 +22,14 @@ class Layout extends Component {
   render() {
     return (
       <Hoc>
-        <Toolbar openSidebar={this.sideBarOpenHandler} />
+        <Toolbar
+          openSidebar={this.sideBarOpenHandler}
+          isAuth={this.props.isAuthenticated}
+        />
         <SideDrawer
           open={this.state.showSideBar}
           close={this.sideBarToggleHandler}
+          isAuth={this.props.isAuthenticated}
         />
         <div> Backdrop </div>
         <main className={classes.Contents}>{this.props.children}</main>
@@ -31,4 +38,8 @@ class Layout extends Component {
   }
 }
 
-export default Layout;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.authData.idToken
+});
+
+export default withRouter(connect(mapStateToProps)(Layout));
