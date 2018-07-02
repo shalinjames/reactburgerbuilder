@@ -1,11 +1,11 @@
 import * as actionTypes from "../actions/actionsTypes";
 import * as utils from "./burger.reducer.utils";
-import { stat } from "fs";
 
 const initialstate = {
   ingredients: null,
   totalPrice: 4,
-  error: true
+  error: true,
+  building: false
 };
 
 export const burgerReducer = (state = initialstate, action) => {

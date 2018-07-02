@@ -13,7 +13,8 @@ export const addIngredient = (state, action) =>
       ...state.ingredients,
       [action.ingredientName]: state.ingredients[action.ingredientName] + 1
     },
-    totalPrice: state.totalPrice + INGREDIENTS_PRICE[action.ingredientName]
+    totalPrice: state.totalPrice + INGREDIENTS_PRICE[action.ingredientName],
+    building: true
   });
 
 export const removeIngredient = (state, action) =>
@@ -22,13 +23,15 @@ export const removeIngredient = (state, action) =>
       ...state.ingredients,
       [action.ingredientName]: state.ingredients[action.ingredientName] - 1
     },
-    totalPrice: state.totalPrice - INGREDIENTS_PRICE[action.ingredientName]
+    totalPrice: state.totalPrice - INGREDIENTS_PRICE[action.ingredientName],
+    building: true
   });
 
 export const setIngredients = (state, action) =>
   updateObject(state, {
     ingredients: { ...action.ingredients },
-    error: false
+    error: false,
+    building: false
   });
 
 export const fetchError = (state, action) =>

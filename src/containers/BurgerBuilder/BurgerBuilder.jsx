@@ -10,6 +10,7 @@ import axios from "../../services/axios-orders";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../higherordercomps/withErrorHandler/withErrorHandler";
 import * as actions from "./store/actions/action";
+import { setAuthRedirectURL } from "../Auth/store/actions/actions";
 
 class BurgerBuilder extends Component {
   state = {
@@ -22,7 +23,12 @@ class BurgerBuilder extends Component {
     this.props.onInitIngredients();
   };
   purchaseHandler = purchasing => {
-    this.setState({ purchasing });
+    if (this.props.isAuthenticated) {
+      this.setState({ purchasing });
+    } else {
+      this.props.onSetAuthRedirectPath("/checkout");
+      this.props.history.push("/auth");
+    }
   };
   purchaseModelHandler = () => {
     this.purchaseHandler(true);
@@ -69,6 +75,7 @@ class BurgerBuilder extends Component {
             purchaseable={this.isPurchaseable(this.props.ings)}
             disabled={disabledInfo}
             ordernow={this.purchaseModelHandler}
+            isAuth={this.props.isAuthenticated}
           />
         </Hoc>
       );
@@ -103,16 +110,19 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => ({
   ings: state.burger.ingredients,
   totalPrice: state.burger.totalPrice,
-  error: state.burger.error
+  error: state.burger.error,
+  isAuthenticated: !!state.auth.authData.idToken
 });
 const mapDispatchToProps = dispatch => ({
   onAddIngredient: ingredientName =>
     dispatch(actions.addIngredient(ingredientName)),
   onRemoveIngredient: ingredientName =>
     dispatch(actions.removeIngredient(ingredientName)),
-  onInitIngredients: () => dispatch(actions.initIngredients())
+  onInitIngredients: () => dispatch(actions.initIngredients()),
+  onSetAuthRedirectPath: path => dispatch(setAuthRedirectURL(path))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  withErrorHandler(BurgerBuilder, axios)
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(BurgerBuilder, axios));

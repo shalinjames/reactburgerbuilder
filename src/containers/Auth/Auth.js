@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import classes from "./Auth.css";
 import authForm from "./Auth.form";
-import { auth } from "./store/actions/actions";
+import { auth, setAuthRedirectURL } from "./store/actions/actions";
 
 class Auth extends Component {
   state = {
@@ -18,7 +19,6 @@ class Auth extends Component {
   loginClicked = event => {
     event.preventDefault();
     const { email, password } = this.state.loginForm;
-    console.log("Login form Clicked!", this.state.loginForm);
     this.props.authenticate(email.value, password.value, this.state.isSignUp);
   };
   checkInputValidity(value, rules = {}) {
@@ -62,7 +62,15 @@ class Auth extends Component {
       return { isSignUp: !prevState.isSignUp };
     });
   };
+  componentDidMount() {
+    if (!this.props.isBurgerBuild && this.props.authRedirectPath !== "/") {
+      this.props.onSetAuthRedirectPath("/");
+    }
+  }
   render() {
+    if (this.props.isAuthenticated) {
+      return <Redirect to={this.props.authRedirectPath} />;
+    }
     const loginForm = [];
     for (let element in this.state.loginForm) {
       const props = this.state.loginForm[element];
@@ -108,12 +116,19 @@ class Auth extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.authData.idToken,
+  authRedirectPath: state.auth.authRedirectPath,
+  isBurgerBuild: state.burger.building
+});
+
 const mapDispatchToProps = dispatch => ({
   authenticate: (email, password, isSignUp) =>
-    dispatch(auth(email, password, isSignUp))
+    dispatch(auth(email, password, isSignUp)),
+  onSetAuthRedirectPath: path => dispatch(setAuthRedirectURL(path))
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Auth);

@@ -48,3 +48,8 @@ export const auth = (email, password, isSignup) => {
       .catch(error => dispatch(failure(error)));
   };
 };
+
+export const setAuthRedirectURL = authRedirectPath => ({
+  type: actionTypes.SET_AUTH_REDIRECT_URL,
+  path: authRedirectPath
+});
